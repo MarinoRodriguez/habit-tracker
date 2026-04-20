@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React from 'react';
 import type { HabitStatus } from '../types';
 import { CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 
@@ -8,11 +8,11 @@ interface BadgeProps {
 }
 
 export default function Badge({ status, className = '' }: BadgeProps) {
-  const configs = {
-    fulfilled: {
+  const configs: Record<HabitStatus, { icon: React.ReactNode; styles: string; label: string }> = {
+    completed: {
       icon: <CheckCircle2 className="w-4 h-4 fill-current" />,
       styles: 'bg-secondary text-white',
-      label: 'Fulfilled'
+      label: 'Completed'
     },
     pending: {
       icon: <Clock className="w-4 h-4" />,

@@ -1,17 +1,25 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Plus, Minus } from 'lucide-react';
-import type { Habit } from '../types';
 import SectionHeader from './SectionHeader';
 import Button from './Button';
 
 interface LogModalProps {
   onClose: () => void;
-  habit: Habit | null;
+  habit: { id: string; unit: string } | null;
+  onLog?: (habitId: string, value: number) => void;
 }
 
-export default function LogModal({ onClose, habit }: LogModalProps) {
+export default function LogModal({ onClose, habit, onLog }: LogModalProps) {
   const [count, setCount] = useState(1);
+
+  const handleLog = () => {
+    if (habit && onLog) {
+      onLog(habit.id, count);
+    }
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center p-0 md:p-6">
       <motion.div
@@ -49,12 +57,7 @@ export default function LogModal({ onClose, habit }: LogModalProps) {
         </div>
 
         <div className="px-10 pb-12 space-y-10">
-         
-
           <div className="space-y-6">
-            {/* <label className="text-[14px] font-bold uppercase tracking-widest text-on-surface-variant text-center block">
-              Amount to Add
-            </label> */}
             <div className="flex items-center justify-center gap-12">
               <button
                 onClick={() => setCount(Math.max(0, count - 1))}
@@ -69,12 +72,11 @@ export default function LogModal({ onClose, habit }: LogModalProps) {
                   value={count}
                   onChange={(e) => setCount(parseInt(e.target.value) || 0)}
                 />
-                {
-                habit?.unit
-                 && <div className="text-[12px] font-bold text-primary uppercase mt-1 tracking-widest">
-                  {habit?.unit ?? "units"}
+                {habit && (
+                  <div className="text-[12px] font-bold text-primary uppercase mt-1 tracking-widest">
+                    {habit.unit}
                   </div>
-                }
+                )}
               </div>
               <button
                 onClick={() => setCount(count + 1)}
@@ -101,8 +103,7 @@ export default function LogModal({ onClose, habit }: LogModalProps) {
             <Button
               variant="kinetic"
               className="w-full py-6 text-xl"
-              onClick={onClose}
-              // icon={<Zap className="w-6 h-6 fill-current" />}
+              onClick={handleLog}
             >
               Registrar
             </Button>

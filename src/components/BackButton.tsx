@@ -1,5 +1,4 @@
 import { ArrowLeft } from "lucide-react";
-import SectionHeader from "./SectionHeader";
 
 interface BackButtonParams {
     onBack: ()=> void;
